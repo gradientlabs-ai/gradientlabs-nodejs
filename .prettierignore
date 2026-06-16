@@ -1,0 +1,5 @@
+dist/
+node_modules/
+coverage/
+CHANGELOG.md
+nodejs_CLIENT_PLAN.md

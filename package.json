@@ -1,0 +1,60 @@
+{
+  "name": "@gradient-labs/client",
+  "version": "0.1.0",
+  "description": "Official Node.js / TypeScript client for the Gradient Labs API",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "gradient-labs",
+    "ai",
+    "customer-support",
+    "api",
+    "client",
+    "sdk"
+  ],
+  "author": "Gradient Labs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gradientlabs-ai/nodejs-client.git"
+  },
+  "homepage": "https://github.com/gradientlabs-ai/nodejs-client#readme",
+  "bugs": {
+    "url": "https://github.com/gradientlabs-ai/nodejs-client/issues"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "@types/node": "^20.14.0",
+    "eslint": "^9.7.0",
+    "prettier": "^3.3.0",
+    "tsup": "^8.2.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.0.0"
+  }
+}
