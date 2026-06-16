@@ -13,7 +13,7 @@ export interface Attachment {
   /** Publicly accessible URL where the attachment can be downloaded. */
   url: string;
   /** Optional short summary of what the attachment is. */
-  summary: string;
+  summary?: string;
   /** Optional full textual extract of the attachment's contents. */
-  description: string;
+  description?: string;
 }

@@ -145,38 +145,51 @@ describe("WebhookVerifier.parse", () => {
     ).toThrow(UnknownWebhookTypeError);
   });
 
+  const baseTask = {
+    id: "t1",
+    agent_id: "a1",
+    input: { foo: "bar" },
+    created: "2026-01-01T00:00:00Z",
+  };
   const eventFixtures: Array<[string, unknown]> = [
-    ["agent.message", { conversation: { id: "c", customer_id: "u", metadata: null }, body: "hi" }],
+    ["agent.message", { conversation: { id: "c", customer_id: "u" }, body: "hi" }],
     [
       "conversation.hand_off",
       {
-        conversation: { id: "c", customer_id: "u", metadata: null },
+        conversation: { id: "c", customer_id: "u" },
         reason_code: "complex",
         reason: "Too complex",
       },
     ],
-    ["conversation.finished", { conversation: { id: "c", customer_id: "u", metadata: null } }],
+    ["conversation.finished", { conversation: { id: "c", customer_id: "u" } }],
     [
       "action.execute",
       {
         action: "create_ticket",
         params: { foo: 1 },
-        conversation: { id: "c", customer_id: "u", metadata: null },
+        conversation: { id: "c", customer_id: "u", customer_source: "public-api", metadata: null },
       },
     ],
     [
       "resource.pull",
-      { resource_type: "order", conversation: { id: "c", customer_id: "u", metadata: null } },
+      {
+        resource_type: "order",
+        conversation: { id: "c", customer_id: "u", customer_source: "public-api", metadata: null },
+      },
     ],
+    ["action.execute", { action: "lookup", params: {}, back_office_task: { id: "t1" } }],
     [
       "back-office-task.complete",
-      { task: { id: "t1", agent_id: "a1" }, result: { result_type: "custom" } },
+      { back_office_task: { ...baseTask, status: "completed", result: { result_type: "custom" } } },
     ],
     [
       "back-office-task.hand-off",
-      { task: { id: "t1", agent_id: "a1" }, hand_off_reason: "needs human" },
+      { back_office_task: { ...baseTask, status: "handed-off", hand_off_reason: "needs human" } },
     ],
-    ["back-office-task.fail", { task: { id: "t1", agent_id: "a1" }, failure_reasons: ["boom"] }],
+    [
+      "back-office-task.fail",
+      { back_office_task: { ...baseTask, status: "failed", failure_reasons: ["boom"] } },
+    ],
   ];
 
   it.each(eventFixtures)("deserializes a %s event", (type, data) => {

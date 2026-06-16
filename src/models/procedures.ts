@@ -27,7 +27,8 @@ export interface ProcedureVersion {
   Author: string;
   Created: string;
   Gated: boolean;
-  GatedConfig: GatedConfig;
+  /** Present only when the version is gated. */
+  GatedConfig?: GatedConfig;
   Live: boolean;
 }
 

@@ -1,4 +1,5 @@
-import type { BackOfficeTaskResult } from "../models/back-office-tasks.js";
+import type { BackOfficeTask } from "../models/back-office-tasks.js";
+import type { CustomerSource } from "../models/enums.js";
 
 /** The set of webhook event types currently delivered by Gradient Labs. */
 export const WebhookType = {
@@ -13,19 +14,33 @@ export const WebhookType = {
 } as const;
 export type WebhookType = (typeof WebhookType)[keyof typeof WebhookType];
 
-/** Details of the conversation a webhook event relates to. */
+/**
+ * The conversation an `agent.message`, `conversation.hand_off`, or
+ * `conversation.finished` event relates to.
+ */
 export interface WebhookConversation {
   id: string;
   customer_id: string;
+}
+
+/**
+ * The conversation an `action.execute` or `resource.pull` event relates to.
+ * Present only when the action ran in a conversation context.
+ */
+export interface ActionWebhookConversation {
+  id: string;
+  customer_id: string;
+  customer_source: CustomerSource;
   /** Metadata attached to the conversation when it was started. */
   metadata: unknown;
 }
 
-/** Details of the back-office task a webhook event relates to. */
-export interface WebhookBackOfficeTask {
+/**
+ * The back-office task an `action.execute` or `resource.pull` event relates to.
+ * Present only when the action ran in a back-office task context.
+ */
+export interface ActionWebhookBackOfficeTask {
   id: string;
-  agent_id: string;
-  metadata?: Record<string, string>;
 }
 
 export interface AgentMessageEvent {
@@ -36,6 +51,8 @@ export interface AgentMessageEvent {
   intent?: string;
   /** Whether this is a holding response sent while the agent works. */
   is_holding?: boolean;
+  /** External ID of the customer message this turn is responding to. */
+  last_customer_message_id?: string;
 }
 
 export interface ConversationHandOffEvent {
@@ -59,27 +76,35 @@ export interface ActionExecuteEvent {
   action: string;
   /** Arguments to execute the action with. */
   params: unknown;
-  conversation: WebhookConversation;
+  /** Set when the action ran in a conversation context. */
+  conversation?: ActionWebhookConversation;
+  /** Set when the action ran in a back-office task context. */
+  back_office_task?: ActionWebhookBackOfficeTask;
 }
 
 export interface ResourcePullEvent {
   resource_type: string;
-  conversation: WebhookConversation;
+  /** Set when the pull ran in a conversation context. */
+  conversation?: ActionWebhookConversation;
+  /** Set when the pull ran in a back-office task context. */
+  back_office_task?: ActionWebhookBackOfficeTask;
 }
 
+/**
+ * The three back-office task events all carry the full task under a single
+ * `back_office_task` key. The outcome (result / failure reasons / hand-off
+ * reason) lives inside that task object.
+ */
 export interface BackOfficeTaskCompleteEvent {
-  task: WebhookBackOfficeTask;
-  result?: BackOfficeTaskResult;
+  back_office_task: BackOfficeTask;
 }
 
 export interface BackOfficeTaskHandOffEvent {
-  task: WebhookBackOfficeTask;
-  hand_off_reason?: string;
+  back_office_task: BackOfficeTask;
 }
 
 export interface BackOfficeTaskFailEvent {
-  task: WebhookBackOfficeTask;
-  failure_reasons?: string[];
+  back_office_task: BackOfficeTask;
 }
 
 /** Fields common to every webhook envelope. */

@@ -78,7 +78,7 @@ export interface AssignConversationParams {
 
 export interface ResumeConversationParams {
   assignee_type: ParticipantType;
-  resources: Record<string, unknown>;
+  resources?: Record<string, unknown>;
   assignee_id?: string;
   reason?: string;
   timestamp?: string;
@@ -115,7 +115,8 @@ export interface RateConversationParams {
 
 export interface ReturnAsyncToolResultParams {
   async_tool_execution_id: string;
-  payload?: Record<string, unknown>;
+  /** Required by the API: the JSON result of the async tool execution. */
+  payload: Record<string, unknown>;
   timestamp?: string;
 }
 

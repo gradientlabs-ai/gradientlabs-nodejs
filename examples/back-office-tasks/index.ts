@@ -11,6 +11,11 @@ if (!apiKey) {
   throw new Error("GRADIENT_LABS_API_KEY environment variable is required");
 }
 
+const agentId = process.env.GL_BACK_OFFICE_AGENT_ID ?? "";
+if (!agentId) {
+  throw new Error("GL_BACK_OFFICE_AGENT_ID environment variable is required");
+}
+
 const client = new GradientLabs({ apiKey });
 
 async function main(): Promise<void> {
@@ -18,7 +23,7 @@ async function main(): Promise<void> {
 
   const task = await client.backOfficeTasks.create({
     id,
-    agent_id: process.env.GL_BACK_OFFICE_AGENT_ID,
+    agent_id: agentId,
     input: { order_id: "order-123", reason: "refund_request" },
     metadata: { source: "nodejs-example" },
   });
