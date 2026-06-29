@@ -154,6 +154,26 @@ See the [`examples/`](./examples) directory for runnable examples covering
 conversations, tools, articles, procedures, resources, back-office tasks, and a
 webhook server.
 
+## Releasing
+
+Releases are published to [npm](https://www.npmjs.com/package/@gradientlabs/client) automatically when a version tag is pushed to `main`.
+
+**One-time setup** (if not already done):
+
+1. Create an npm **Automation** token for the `@gradientlabs` org at [npmjs.com](https://www.npmjs.com) → Access Tokens → Generate New Token.
+2. Add it as a repository secret named `NPM_TOKEN` on this repo (Settings → Secrets and variables → Actions).
+
+**To publish a new version:**
+
+1. Merge all changes into `main`.
+2. Update the version in `package.json`.
+3. Push a version tag:
+   ```sh
+   git tag v1.2.3
+   git push origin v1.2.3
+   ```
+4. The [publish workflow](.github/workflows/publish.yml) runs automatically: it builds the library and publishes it to npm using the tag as the package version.
+
 ## Development
 
 ```bash
