@@ -160,8 +160,8 @@ Releases are published to [npm](https://www.npmjs.com/package/@gradientlabs/clie
 
 **One-time setup** (if not already done):
 
-1. Create an npm **Automation** token for the `@gradientlabs` org at [npmjs.com](https://www.npmjs.com) → Access Tokens → Generate New Token.
-2. Add it as a repository secret named `NPM_TOKEN` on this repo (Settings → Secrets and variables → Actions).
+1. On npmjs.com, go to the `@gradientlabs/client` package → **Settings** → **Trusted Publishers** → **Add trusted publisher**.
+2. Select **GitHub Actions** and fill in owner `gradientlabs-ai`, repository `gradientlabs-nodejs`, workflow `publish.yml`.
 
 **To publish a new version:**
 
