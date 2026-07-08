@@ -1,4 +1,4 @@
-import type { Attachment } from "./common.js";
+import type { Attachment, CustomerSupportPlatformIdentifier } from "./common.js";
 import type { Channel, ConversationEventType, CustomerSource, ParticipantType } from "./enums.js";
 
 /** Agent-derived metadata about how a conversation was processed. */
@@ -41,6 +41,12 @@ export interface StartConversationParams {
   id: string;
   /** Unique external identifier for the customer. */
   customer_id: string;
+  /**
+   * Optional identifiers linking the customer to their record(s) in
+   * third-party support platforms (e.g. Intercom, Zendesk). Added to the
+   * customer alongside customer_id.
+   */
+  customer_support_platform_identifiers?: CustomerSupportPlatformIdentifier[];
   channel: Channel;
   /** Optional identifier of the participant the conversation is assigned to. */
   assignee_id?: string;
