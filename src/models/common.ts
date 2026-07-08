@@ -1,7 +1,7 @@
 import type {
   AttachmentType,
-  CustomerSupportPlatform,
   CustomerSupportPlatformIdentifierType,
+  SupportPlatform,
 } from "./enums.js";
 
 /** Basic information about a user, e.g. the author of a procedure. */
@@ -24,7 +24,7 @@ export interface Attachment {
 
 /** Links a customer to their record in a third-party support platform. */
 export interface CustomerSupportPlatformIdentifier {
-  support_platform: CustomerSupportPlatform;
+  support_platform: SupportPlatform;
   /**
    * Only meaningful for platforms with more than one kind of identifier
    * (e.g. Intercom's "lead" vs "user", or Salesforce's contact vs account

@@ -218,17 +218,6 @@ export type SupportPlatform =
   | (typeof SupportPlatform)[keyof typeof SupportPlatform]
   | (string & {});
 
-export const CustomerSupportPlatform = {
-  Intercom: "intercom",
-  Zendesk: "zendesk",
-  Salesforce: "salesforce",
-  Freshchat: "freshchat",
-  Freshdesk: "freshdesk",
-} as const;
-export type CustomerSupportPlatform =
-  | (typeof CustomerSupportPlatform)[keyof typeof CustomerSupportPlatform]
-  | (string & {});
-
 export const CustomerSupportPlatformIdentifierType = {
   IntercomLead: "intercom_lead",
   IntercomUser: "intercom_user",
