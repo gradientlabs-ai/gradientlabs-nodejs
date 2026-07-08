@@ -80,6 +80,30 @@ describe("HttpClient", () => {
     expect(record[0]!.body).toContain('"id":"conv_1"');
   });
 
+  it("serializes customer_support_platform_identifiers when starting a conversation", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 200, body: conversationJson }, record),
+    });
+
+    await client.conversations.start({
+      id: "conv_1",
+      customer_id: "cust_1",
+      channel: "web",
+      customer_support_platform_identifiers: [
+        { support_platform: "intercom", type: "intercom_user", value: "6953e162a988d9ef0f73ef9b" },
+        { support_platform: "freshdesk", value: "12345" },
+      ],
+    });
+
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.customer_support_platform_identifiers).toEqual([
+      { support_platform: "intercom", type: "intercom_user", value: "6953e162a988d9ef0f73ef9b" },
+      { support_platform: "freshdesk", value: "12345" },
+    ]);
+  });
+
   it("respects a custom base URL", async () => {
     const record: RecordedRequest[] = [];
     const client = new GradientLabs({

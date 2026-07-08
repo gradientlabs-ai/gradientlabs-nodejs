@@ -218,6 +218,18 @@ export type SupportPlatform =
   | (typeof SupportPlatform)[keyof typeof SupportPlatform]
   | (string & {});
 
+export const CustomerSupportPlatformIdentifierType = {
+  IntercomLead: "intercom_lead",
+  IntercomUser: "intercom_user",
+  ZendeskConversationUser: "zendesk_conversation_user",
+  ZendeskSupportUser: "zendesk_support_user",
+  SalesforceContactId: "salesforce_contact_id",
+  SalesforceAccountId: "salesforce_account_id",
+} as const;
+export type CustomerSupportPlatformIdentifierType =
+  | (typeof CustomerSupportPlatformIdentifierType)[keyof typeof CustomerSupportPlatformIdentifierType]
+  | (string & {});
+
 export const BodyEncoding = {
   Json: "application/json",
   Form: "application/x-www-form-urlencoded",
