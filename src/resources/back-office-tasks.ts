@@ -22,4 +22,11 @@ export class BackOfficeTasks {
       signal: config.signal,
     });
   }
+
+  /** Deletes a back-office task. */
+  delete(id: string, config: RequestConfig = {}): Promise<void> {
+    return this.http.request("DELETE", `back-office-tasks/${encodeURIComponent(id)}`, {
+      signal: config.signal,
+    });
+  }
 }
