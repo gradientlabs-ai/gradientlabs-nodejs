@@ -106,6 +106,13 @@ export class Conversations {
     });
   }
 
+  /** Deletes a conversation. */
+  delete(id: string, config: RequestConfig = {}): Promise<void> {
+    return this.http.request("DELETE", `conversations/${encodeURIComponent(id)}`, {
+      signal: config.signal,
+    });
+  }
+
   /** Re-opens a conversation that was previously finished. */
   resume(id: string, params: ResumeConversationParams, config: RequestConfig = {}): Promise<void> {
     return this.http.request("PUT", `conversations/${encodeURIComponent(id)}/resume`, {

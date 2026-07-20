@@ -104,6 +104,36 @@ describe("HttpClient", () => {
     ]);
   });
 
+  it("deletes a conversation with a DELETE request and no body", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 202, body: "" }, record),
+    });
+
+    await expect(client.conversations.delete("conv_1")).resolves.toBeUndefined();
+
+    expect(record).toHaveLength(1);
+    expect(record[0]!.method).toBe("DELETE");
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/conversations/conv_1");
+    expect(record[0]!.body).toBeUndefined();
+  });
+
+  it("deletes a back-office task with a DELETE request and no body", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 202, body: "" }, record),
+    });
+
+    await expect(client.backOfficeTasks.delete("task_1")).resolves.toBeUndefined();
+
+    expect(record).toHaveLength(1);
+    expect(record[0]!.method).toBe("DELETE");
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/back-office-tasks/task_1");
+    expect(record[0]!.body).toBeUndefined();
+  });
+
   it("respects a custom base URL", async () => {
     const record: RecordedRequest[] = [];
     const client = new GradientLabs({
