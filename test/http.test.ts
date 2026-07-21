@@ -104,6 +104,26 @@ describe("HttpClient", () => {
     ]);
   });
 
+  it("sends reason and reason_code when finishing a conversation", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 202, body: "" }, record),
+    });
+
+    await client.conversations.finish("conv_1", {
+      reason: "customer said goodbye",
+      reason_code: "customer-ended-chat",
+    });
+
+    expect(record).toHaveLength(1);
+    expect(record[0]!.method).toBe("PUT");
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/conversations/conv_1/finish");
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.reason).toBe("customer said goodbye");
+    expect(body.reason_code).toBe("customer-ended-chat");
+  });
+
   it("deletes a conversation with a DELETE request and no body", async () => {
     const record: RecordedRequest[] = [];
     const client = new GradientLabs({
