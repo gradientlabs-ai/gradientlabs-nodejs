@@ -37,7 +37,10 @@ async function main(): Promise<void> {
   const fetched = await client.conversations.get(id);
   console.log("Read conversation, latest intent:", fetched.latest_intent || "(none yet)");
 
-  await client.conversations.finish(id, { reason: "example complete" });
+  await client.conversations.finish(id, {
+    reason: "example complete",
+    reason_code: "customer-ended-chat",
+  });
   console.log("Finished conversation");
 }
 

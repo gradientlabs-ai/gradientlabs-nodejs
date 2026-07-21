@@ -97,6 +97,8 @@ export interface CancelConversationParams {
 
 export interface FinishConversationParams {
   reason?: string;
+  /** Categorises why the conversation finished, e.g. "customer-ended-chat" or "customer-unresponsive". */
+  reason_code?: string;
   timestamp?: string;
 }
 
