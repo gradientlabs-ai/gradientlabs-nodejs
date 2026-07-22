@@ -7,6 +7,8 @@ import type {
   Conversation,
   ConversationEventParams,
   FinishConversationParams,
+  MemoriesBulkUploadParams,
+  MemoriesBulkUploadResult,
   Message,
   ReadConversationParams,
   RateConversationParams,
@@ -116,6 +118,18 @@ export class Conversations {
   /** Re-opens a conversation that was previously finished. */
   resume(id: string, params: ResumeConversationParams, config: RequestConfig = {}): Promise<void> {
     return this.http.request("PUT", `conversations/${encodeURIComponent(id)}/resume`, {
+      body: params,
+      signal: config.signal,
+    });
+  }
+
+  /** Bulk uploads a batch of memories scoped to a conversation for the agent to search over on demand. */
+  uploadMemories(
+    id: string,
+    params: MemoriesBulkUploadParams,
+    config: RequestConfig = {},
+  ): Promise<MemoriesBulkUploadResult> {
+    return this.http.request("POST", `conversations/${encodeURIComponent(id)}/memories`, {
       body: params,
       signal: config.signal,
     });

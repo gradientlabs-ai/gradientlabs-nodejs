@@ -154,6 +154,32 @@ describe("HttpClient", () => {
     expect(record[0]!.body).toBeUndefined();
   });
 
+  it("bulk uploads conversation memories and returns the upload result", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch(
+        { status: 200, body: JSON.stringify({ upload_id: "upl_1", memories_inserted: 2 }) },
+        record,
+      ),
+    });
+
+    const result = await client.conversations.uploadMemories("conv_1", {
+      idempotency_key: "key-123",
+      memories: [{ note: "prefers email" }, { order_id: "A1", ts: "2026-01-01T00:00:00Z" }],
+      created_at_keys: ["ts", "created_at"],
+    });
+
+    expect(result).toEqual({ upload_id: "upl_1", memories_inserted: 2 });
+    expect(record).toHaveLength(1);
+    expect(record[0]!.method).toBe("POST");
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/conversations/conv_1/memories");
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.idempotency_key).toBe("key-123");
+    expect(body.memories).toHaveLength(2);
+    expect(body.created_at_keys).toEqual(["ts", "created_at"]);
+  });
+
   it("respects a custom base URL", async () => {
     const record: RecordedRequest[] = [];
     const client = new GradientLabs({
