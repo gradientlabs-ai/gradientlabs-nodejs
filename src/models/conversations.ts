@@ -133,26 +133,6 @@ export interface ReadConversationParams {
   support_platform?: string;
 }
 
-export interface MemoriesBulkUploadParams {
-  /**
-   * De-duplicates retries of the same upload. Re-uploading with the same key
-   * returns the original upload instead of inserting again.
-   */
-  idempotency_key: string;
-  /** The individual memories to store; each element is kept verbatim as the memory's raw payload. */
-  memories: Record<string, unknown>[];
-  /**
-   * JSON keys tried in order to read each memory's timestamp from its payload.
-   * When none match, the upload time is used.
-   */
-  created_at_keys?: string[];
-}
-
-export interface MemoriesBulkUploadResult {
-  upload_id: string;
-  memories_inserted: number;
-}
-
 export interface StartOutboundConversationParams {
   customer_id: string;
   customer_source: CustomerSource;

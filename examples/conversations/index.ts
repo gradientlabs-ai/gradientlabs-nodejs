@@ -1,6 +1,6 @@
 /**
  * Conversations example: starts a conversation, sends a customer message, reads
- * it back, uploads a batch of memories, then finishes it.
+ * it back, then finishes it.
  *
  * In your own project, import from the published package:
  *   import { GradientLabs } from "@gradientlabs/client";
@@ -36,16 +36,6 @@ async function main(): Promise<void> {
 
   const fetched = await client.conversations.get(id);
   console.log("Read conversation, latest intent:", fetched.latest_intent || "(none yet)");
-
-  const upload = await client.conversations.uploadMemories(id, {
-    idempotency_key: `memories-${Date.now()}`,
-    memories: [
-      { kind: "order", order_id: "A-1001", status: "shipped", occurred_at: "2026-01-01T00:00:00Z" },
-      { kind: "preference", channel: "email" },
-    ],
-    created_at_keys: ["occurred_at"],
-  });
-  console.log("Uploaded memories:", upload.upload_id, upload.memories_inserted);
 
   await client.conversations.finish(id, {
     reason: "example complete",

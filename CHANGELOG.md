@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `Conversations.uploadMemories` for `POST /conversations/{id}/memories`, which
-  bulk uploads a batch of memories scoped to a conversation for the agent to
-  search over on demand.
+- `Customers.batchCreateMemories` for `POST /customers/{customer_id}/memories`,
+  which asynchronously creates a batch of customer-scoped memories for the agent
+  to search over on demand. Returns no body; throws with status 409 if a batch
+  is already being created for the same customer.
 
 ## [0.1.2]
 

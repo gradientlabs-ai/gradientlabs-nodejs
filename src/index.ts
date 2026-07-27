@@ -40,6 +40,7 @@ export {
 
 // Resource classes (for typing/advanced usage)
 export { Conversations } from "./resources/conversations.js";
+export { Customers } from "./resources/customers.js";
 export { OutboundConversations } from "./resources/outbound-conversations.js";
 export { BackOfficeTasks } from "./resources/back-office-tasks.js";
 export { Voice } from "./resources/voice.js";
@@ -62,6 +63,7 @@ export * from "./models/enums.js";
 // Models
 export * from "./models/common.js";
 export * from "./models/conversations.js";
+export * from "./models/customers.js";
 export * from "./models/back-office-tasks.js";
 export * from "./models/voice.js";
 export * from "./models/tools.js";
