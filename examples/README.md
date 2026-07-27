@@ -15,8 +15,8 @@ export GRADIENT_LABS_API_KEY="sk_live_..."
 ```
 
 Some examples need a **Management** API key (tools, articles, procedures,
-resources); the conversation, back-office-task, and voice examples need an
-**Integration** key.
+resources); the conversation, customer, back-office-task, and voice examples
+need an **Integration** key.
 
 ## Running
 
@@ -24,6 +24,7 @@ Use [`tsx`](https://github.com/privatenumber/tsx) to run the TypeScript directly
 
 ```bash
 npx tsx examples/conversations/index.ts
+npx tsx examples/customers/index.ts
 npx tsx examples/tools/index.ts
 npx tsx examples/articles/index.ts
 npx tsx examples/procedures/index.ts

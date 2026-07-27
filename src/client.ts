@@ -3,6 +3,7 @@ import { HttpClient, type FetchLike } from "./internal/http.js";
 import { Articles } from "./resources/articles.js";
 import { BackOfficeTasks } from "./resources/back-office-tasks.js";
 import { Conversations } from "./resources/conversations.js";
+import { Customers } from "./resources/customers.js";
 import { HandOffTargets } from "./resources/hand-off-targets.js";
 import { IpAddressesResource } from "./resources/ip-addresses.js";
 import { Notes } from "./resources/notes.js";
@@ -45,6 +46,7 @@ const defaultFetch: FetchLike = (input, init) =>
 export class GradientLabs {
   // Integration role (publicapi)
   readonly conversations: Conversations;
+  readonly customers: Customers;
   readonly outboundConversations: OutboundConversations;
   readonly backOfficeTasks: BackOfficeTasks;
   readonly voice: Voice;
@@ -78,6 +80,7 @@ export class GradientLabs {
     });
 
     this.conversations = new Conversations(http);
+    this.customers = new Customers(http);
     this.outboundConversations = new OutboundConversations(http);
     this.backOfficeTasks = new BackOfficeTasks(http);
     this.voice = new Voice(http);

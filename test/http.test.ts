@@ -154,6 +154,37 @@ describe("HttpClient", () => {
     expect(record[0]!.body).toBeUndefined();
   });
 
+  it("batch creates customer memories", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 202, body: "" }, record),
+    });
+
+    const result = await client.customers.batchCreateMemories("cust_1", {
+      memories: [
+        {
+          external_id: "order_123",
+          custom_type: "order",
+          created_at: "2026-07-01T10:00:00Z",
+          data: { status: "shipped" },
+        },
+        { external_id: "pref_1", created_at: "2026-07-02T10:00:00Z", data: { channel: "email" } },
+      ],
+    });
+
+    expect(result).toBeUndefined();
+    expect(record).toHaveLength(1);
+    expect(record[0]!.method).toBe("POST");
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/customers/cust_1/memories");
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.memories).toHaveLength(2);
+    expect(body.memories[0].external_id).toBe("order_123");
+    expect(body.memories[0].custom_type).toBe("order");
+    expect(body.memories[0].created_at).toBe("2026-07-01T10:00:00Z");
+    expect(body.memories[0].data).toEqual({ status: "shipped" });
+  });
+
   it("respects a custom base URL", async () => {
     const record: RecordedRequest[] = [];
     const client = new GradientLabs({
