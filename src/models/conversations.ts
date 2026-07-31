@@ -1,5 +1,5 @@
 import type { Attachment, CustomerSupportPlatformIdentifier } from "./common.js";
-import type { Channel, ConversationEventType, CustomerSource, ParticipantType } from "./enums.js";
+import type { Channel, ConversationEventType, ParticipantType, SupportPlatform } from "./enums.js";
 
 /** Agent-derived metadata about how a conversation was processed. */
 export interface AgentMetadata {
@@ -133,15 +133,76 @@ export interface ReadConversationParams {
   support_platform?: string;
 }
 
-export interface StartOutboundConversationParams {
+/** Fields shared by every outbound conversation start request. */
+interface StartOutboundConversationParamsBase {
+  /**
+   * Your own identifier for the customer, as used in your systems. It is stored
+   * as the customer's company customer ID and is echoed back to you in tool and
+   * webhook payloads.
+   */
   customer_id: string;
-  customer_source: CustomerSource;
+  /**
+   * ID of the outbound procedure that defines what the AI agent should
+   * accomplish. It must be of type "outbound", live (deployed), and enabled for
+   * this channel.
+   */
   procedure_id: string;
-  channel?: Channel;
-  support_platform?: string;
-  body?: string;
-  subject?: string;
+  /**
+   * Optional identifiers linking the customer to their record(s) in third-party
+   * support platforms (e.g. Intercom, Zendesk, Salesforce). Added to the
+   * customer alongside customer_id, and used to match against customers created
+   * via those platforms' native integrations.
+   */
+  customer_support_platform_identifiers?: CustomerSupportPlatformIdentifier[];
+  /** Structured context data the AI agent can use, keyed by resource type. */
   resources?: Record<string, unknown>;
+}
+
+export interface StartOutboundChatConversationParams extends StartOutboundConversationParamsBase {
+  /**
+   * The platform the chat is delivered on. It needs an identifier for the
+   * customer in `customer_support_platform_identifiers`, unless the customer
+   * already carries one from an earlier conversation.
+   */
+  support_platform: SupportPlatform;
+  /**
+   * Content of the opening message. If omitted, the AI agent generates one
+   * based on the procedure.
+   */
+  body?: string;
+}
+
+/** Opening email content: subject and body must be supplied together, or both omitted. */
+type OutboundEmailOpeningMessage =
+  | {
+      /** Subject line for the opening email. */
+      subject: string;
+      /** Content of the opening email. */
+      body: string;
+    }
+  | {
+      subject?: never;
+      body?: never;
+    };
+
+export type StartOutboundEmailConversationParams = StartOutboundConversationParamsBase & {
+  /**
+   * The platform the email is sent from. It needs an identifier for the
+   * customer in `customer_support_platform_identifiers`, unless the customer
+   * already carries one from an earlier conversation. Zendesk requires type
+   * "zendesk_support_user"; Salesforce requires type "salesforce_contact_id".
+   */
+  support_platform: SupportPlatform;
+} & OutboundEmailOpeningMessage;
+
+export interface StartOutboundPhoneConversationParams extends StartOutboundConversationParamsBase {
+  /** The customer's phone number to dial, in E.164 format (e.g. "+14155551234"). */
+  to_phone_number: string;
+  /**
+   * The caller ID to place the call from, in E.164 format. Must be a phone
+   * number already provisioned for your company.
+   */
+  from_phone_number: string;
 }
 
 export interface OutboundConversation {

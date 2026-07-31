@@ -97,6 +97,51 @@ const page = await client.procedures.list();
 const next = await client.procedures.list({ cursor: page.pageInfo.next });
 ```
 
+## Outbound conversations
+
+`client.outboundConversations` starts conversations the AI agent initiates, one
+method per channel. All three return `{ conversation_id }`.
+
+```ts
+// Live chat — support_platform is required.
+await client.outboundConversations.startChat({
+  customer_id: "customer-678",
+  procedure_id: "proc_abc",
+  support_platform: "intercom",
+  body: "Hi! Your order has shipped.", // optional; the agent writes one if omitted
+  customer_support_platform_identifiers: [
+    { support_platform: "intercom", type: "intercom_user", value: "6953e162a988d9ef0f73ef9b" },
+  ],
+});
+
+// Email — subject and body must be supplied together, or both omitted.
+await client.outboundConversations.startEmail({
+  customer_id: "customer-678",
+  procedure_id: "proc_abc",
+  support_platform: "zendesk",
+  subject: "Your recent order",
+  body: "Your order has shipped.",
+  customer_support_platform_identifiers: [
+    { support_platform: "zendesk", type: "zendesk_support_user", value: "42" },
+  ],
+});
+
+// Phone — no support_platform; the call is placed over voice.
+await client.outboundConversations.startPhone({
+  customer_id: "customer-678",
+  procedure_id: "proc_abc",
+  to_phone_number: "+14155551234",
+  from_phone_number: "+14155559876", // must be provisioned for your company
+});
+```
+
+`customer_id` is always your own identifier for the customer. Third-party
+platform IDs go in `customer_support_platform_identifiers`, keyed by platform —
+Zendesk requires type `zendesk_support_user` and Salesforce
+`salesforce_contact_id`. The platform the message is delivered on needs an
+identifier there, unless the customer already carries one from an earlier
+conversation.
+
 ## Webhook verification
 
 Construct the client with your `webhookSigningKey`, then verify and parse
