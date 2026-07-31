@@ -1,6 +1,6 @@
 {
   "name": "@gradientlabs/client",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Official Node.js / TypeScript client for the Gradient Labs API",
   "type": "module",
   "engines": {
