@@ -34,6 +34,8 @@ const conversationJson = JSON.stringify({
   latest_handoff_target: "",
 });
 
+const outboundJson = JSON.stringify({ conversation_id: "conv_out_1" });
+
 describe("HttpClient", () => {
   it("sets the Authorization bearer header on every request", async () => {
     const record: RecordedRequest[] = [];
@@ -152,6 +154,95 @@ describe("HttpClient", () => {
     expect(record[0]!.method).toBe("DELETE");
     expect(record[0]!.input).toBe("https://api.gradient-labs.ai/back-office-tasks/task_1");
     expect(record[0]!.body).toBeUndefined();
+  });
+
+  it("starts an outbound chat conversation", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 200, body: outboundJson }, record),
+    });
+
+    const result = await client.outboundConversations.startChat({
+      customer_id: "cust_1",
+      procedure_id: "proc_1",
+      support_platform: "intercom",
+      body: "Hi, just checking in about your order.",
+      customer_support_platform_identifiers: [
+        { support_platform: "intercom", type: "intercom_user", value: "6953e162a988d9ef0f73ef9b" },
+      ],
+    });
+
+    expect(result.conversation_id).toBe("conv_out_1");
+    expect(record[0]!.method).toBe("POST");
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/outbound/conversations/chat");
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.support_platform).toBe("intercom");
+    expect(body.body).toBe("Hi, just checking in about your order.");
+    expect(body.customer_support_platform_identifiers).toHaveLength(1);
+  });
+
+  it("starts an outbound email conversation with a subject and body", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 200, body: outboundJson }, record),
+    });
+
+    await client.outboundConversations.startEmail({
+      customer_id: "cust_1",
+      procedure_id: "proc_1",
+      support_platform: "zendesk",
+      subject: "Your recent order",
+      body: "Your order has shipped.",
+      customer_support_platform_identifiers: [
+        { support_platform: "zendesk", type: "zendesk_support_user", value: "42" },
+      ],
+    });
+
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/outbound/conversations/email");
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.subject).toBe("Your recent order");
+    expect(body.body).toBe("Your order has shipped.");
+  });
+
+  it("starts an outbound email conversation without an opening message", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 200, body: outboundJson }, record),
+    });
+
+    await client.outboundConversations.startEmail({
+      customer_id: "cust_1",
+      procedure_id: "proc_1",
+      support_platform: "zendesk",
+    });
+
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.subject).toBeUndefined();
+    expect(body.body).toBeUndefined();
+  });
+
+  it("starts an outbound phone conversation", async () => {
+    const record: RecordedRequest[] = [];
+    const client = new GradientLabs({
+      apiKey: "sk_test_123",
+      fetch: fakeFetch({ status: 200, body: outboundJson }, record),
+    });
+
+    await client.outboundConversations.startPhone({
+      customer_id: "cust_1",
+      procedure_id: "proc_1",
+      to_phone_number: "+14155551234",
+      from_phone_number: "+14155559876",
+    });
+
+    expect(record[0]!.input).toBe("https://api.gradient-labs.ai/outbound/conversations/phone");
+    const body = JSON.parse(record[0]!.body!);
+    expect(body.to_phone_number).toBe("+14155551234");
+    expect(body.from_phone_number).toBe("+14155559876");
+    expect(body.support_platform).toBeUndefined();
   });
 
   it("respects a custom base URL", async () => {
