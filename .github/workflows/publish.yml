@@ -17,7 +17,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          # Exact release with the eMudhra CA fix: setup-node's manifest lags
+          # it, so "24" still resolves to an unpatched build.
+          node-version: 24.22.1
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies

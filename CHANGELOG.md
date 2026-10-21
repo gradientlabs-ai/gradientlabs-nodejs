@@ -25,6 +25,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   on chat and email; phone takes `to_phone_number` and `from_phone_number`
   instead.
 
+### Changed
+
+- **Breaking**: requires Node.js 22 or newer (`engines` was `>=20`). Node.js 20
+  has no fix for the eMudhra certificate authority compromise below.
+
+### Security
+
+- The client uses Node's built-in `fetch`, which trusts the CA list bundled with
+  your Node.js release. Node.js releases before 22.23.4, 24.22.1 and 26.12.1
+  still trust the compromised eMudhra intermediate certificate authorities
+  disclosed in October 2026, which would let an attacker impersonate the
+  Gradient Labs API. Run Node.js 22.23.4, 24.22.1, 26.12.1 or later.
+
+## [0.1.2]
+
+### Added
+
+- `client.conversations.delete()` and `client.backOfficeTasks.delete()`.
+- `reason_code` on finishing a conversation.
+- `customer_support_platform_identifiers` on starting a conversation.
+
 ## [Unreleased]
 
 ### Added

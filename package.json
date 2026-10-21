@@ -4,7 +4,7 @@
   "description": "Official Node.js / TypeScript client for the Gradient Labs API",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "exports": {
     ".": {

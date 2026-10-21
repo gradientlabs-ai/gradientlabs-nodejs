@@ -4,7 +4,13 @@ Official client for the [Gradient Labs API](https://api.gradient-labs.ai). Writt
 in TypeScript, ships full type declarations and both ESM and CommonJS builds, and
 has **zero runtime dependencies** (it uses Node's built-in `fetch` and `crypto`).
 
-Requires **Node.js 20** or newer.
+Requires **Node.js 22** or newer.
+
+The client uses Node's built-in `fetch`, which verifies TLS certificates against
+the CA list bundled with your Node.js release. Releases before **22.23.4**,
+**24.22.1** and **26.12.1** still trust the compromised eMudhra intermediate
+certificate authorities disclosed in October 2026, so run one of those versions
+or later. Node.js 20 and earlier have no fix.
 
 ## Installation
 
