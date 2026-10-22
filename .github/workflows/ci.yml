@@ -8,10 +8,18 @@ on:
 
 jobs:
   build:
+    # Named by major so required status checks survive version bumps.
+    name: build (${{ matrix.major }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20, 22]
+        # Exact releases with the eMudhra CA fix: setup-node's manifest lags
+        # them, so "22" and "24" still resolve to unpatched builds.
+        include:
+          - major: 22
+            node-version: 22.23.4
+          - major: 24
+            node-version: 24.22.1
     steps:
       - uses: actions/checkout@v4
 
