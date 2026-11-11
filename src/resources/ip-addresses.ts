@@ -10,12 +10,12 @@ export interface IpAddresses {
 }
 
 /**
- * IP address endpoints. Requires a Management API key.
+ * IP address endpoints. These endpoints are public: no API key is required.
  */
 export class IpAddressesResource {
   constructor(private readonly http: HttpClient) {}
 
-  /** Returns the list of IP addresses Gradient Labs uses, in CIDR format. */
+  /** Returns the list of IP addresses Gradient Labs uses, in CIDR format. Public: no API key is required. */
   list(config: RequestConfig = {}): Promise<IpAddresses> {
     return this.http.request("GET", "ip-addresses", { signal: config.signal });
   }
