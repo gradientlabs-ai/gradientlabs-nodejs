@@ -65,7 +65,14 @@ export class HttpClient {
       });
     }
 
-    const rawBody = await response.text();
+    let rawBody: string;
+    try {
+      rawBody = await response.text();
+    } catch (cause) {
+      throw new GradientLabsError(`failed to read response body: ${errorMessage(cause)}`, {
+        cause,
+      });
+    }
 
     if (response.status < 200 || response.status > 299) {
       throw toApiError(response.status, rawBody);
