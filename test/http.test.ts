@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { ApiError, GradientLabs, type FetchLike } from "../src/index.js";
+import { ApiError, GradientLabs, GradientLabsError, type FetchLike } from "../src/index.js";
 
 interface RecordedRequest {
   input: string;
@@ -300,5 +300,19 @@ describe("HttpClient", () => {
     await expect(
       client.conversations.get("conv_1", {}, { signal: controller.signal }),
     ).rejects.toThrow();
+  });
+});
+
+describe("response body read failures", () => {
+  it("wraps them in GradientLabsError with the cause preserved", async () => {
+    const original = new Error("synthetic body failure");
+    const client = new GradientLabs({
+      apiKey: "key",
+      fetch: () => Promise.resolve({ status: 200, text: () => Promise.reject(original) }),
+    });
+
+    const err = await client.conversations.get("conv_1").catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(GradientLabsError);
+    expect((err as GradientLabsError).cause).toBe(original);
   });
 });

@@ -155,7 +155,11 @@ incoming requests. Pass the **raw** request body — the signature is computed o
 the exact bytes received.
 
 ```ts
-import { GradientLabs, InvalidWebhookSignatureError } from "@gradientlabs/client";
+import {
+  GradientLabs,
+  InvalidWebhookSignatureError,
+  UnknownWebhookTypeError,
+} from "@gradientlabs/client";
 
 const client = new GradientLabs({
   apiKey: process.env.GRADIENT_LABS_API_KEY!,
@@ -184,6 +188,10 @@ app.post("/webhooks", express.raw({ type: "*/*" }), (req, res) => {
   } catch (err) {
     if (err instanceof InvalidWebhookSignatureError) {
       res.sendStatus(401);
+    } else if (err instanceof UnknownWebhookTypeError) {
+      // Log and acknowledge so Gradient Labs does not retry.
+      console.warn("Unknown webhook type:", err.type);
+      res.sendStatus(200);
     } else {
       res.sendStatus(500);
     }

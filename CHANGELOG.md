@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Failures reading a response body are now thrown as `GradientLabsError` with
+  the original `cause`, instead of propagating as a raw error.
+- The README webhook example now handles `UnknownWebhookTypeError` by
+  responding 200, matching `examples/webhooks`.
+
 ## [0.1.3]
 
 ### Removed
