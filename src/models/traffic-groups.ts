@@ -1,6 +1,8 @@
+import type { TrafficGroupTargetType } from "./enums.js";
+
 /** An assigned or excluded target within a traffic group. */
 export interface TrafficGroupTarget {
-  target_type: string;
+  target_type: TrafficGroupTargetType;
   target_id: string;
 }
 
@@ -22,6 +24,6 @@ export interface UpdateTrafficGroupParams {
 
 export interface TrafficGroupTargetParams {
   /** Type of target, e.g. "procedure". */
-  target_type: string;
+  target_type: TrafficGroupTargetType;
   target_id: string;
 }

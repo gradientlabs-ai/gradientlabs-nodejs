@@ -2,11 +2,14 @@
 export interface HandOffTarget {
   id: string;
   name: string;
+  ref: string;
 }
 
 export interface UpsertHandOffTargetParams {
   id: string;
   name: string;
+  /** Optional name a back-office test case uses to refer to this target. */
+  ref?: string;
 }
 
 export interface DeleteHandOffTargetParams {

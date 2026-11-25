@@ -59,6 +59,7 @@ export const CustomerSource = {
   Talkdesk: "talkdesk",
   IntercomVoice: "intercom-voice",
   Livechat: "livechat",
+  Kustomer: "kustomer",
   WebApp: "web-app",
   Gmail: "gmail",
   File: "file",
@@ -202,6 +203,7 @@ export const SupportPlatform = {
   Freshdesk: "freshdesk",
   Gmail: "gmail",
   Intercom: "intercom",
+  Kustomer: "kustomer",
   Livechat: "livechat",
   PublicApi: "public-api",
   ChatSdk: "chat-sdk",
@@ -225,6 +227,8 @@ export const CustomerSupportPlatformIdentifierType = {
   ZendeskSupportUser: "zendesk_support_user",
   SalesforceContactId: "salesforce_contact_id",
   SalesforceAccountId: "salesforce_account_id",
+  SalesforceContactEmail: "salesforce_contact_email",
+  SalesforceSuppliedEmail: "salesforce_supplied_email",
 } as const;
 export type CustomerSupportPlatformIdentifierType =
   | (typeof CustomerSupportPlatformIdentifierType)[keyof typeof CustomerSupportPlatformIdentifierType]
@@ -254,5 +258,41 @@ export const ParameterType = {
   Date: "date",
   Timestamp: "timestamp",
   Duration: "duration",
+  Json: "json",
+  Attachment: "attachment",
 } as const;
 export type ParameterType = (typeof ParameterType)[keyof typeof ParameterType] | (string & {});
+
+export const ConversationStatus = {
+  Observing: "observing",
+  Active: "active",
+  Cancelled: "cancelled",
+  Finished: "finished",
+  Failed: "failed",
+} as const;
+export type ConversationStatus =
+  | (typeof ConversationStatus)[keyof typeof ConversationStatus]
+  | (string & {});
+
+export const ConversationFinishReasonCode = {
+  CustomerEndedChat: "customer-ended-chat",
+  CustomerUnresponsive: "customer-unresponsive",
+} as const;
+export type ConversationFinishReasonCode =
+  | (typeof ConversationFinishReasonCode)[keyof typeof ConversationFinishReasonCode]
+  | (string & {});
+
+export const ToolParameterTransferMode = {
+  Base64: "base64",
+  TemporaryUrl: "temporary_url",
+} as const;
+export type ToolParameterTransferMode =
+  | (typeof ToolParameterTransferMode)[keyof typeof ToolParameterTransferMode]
+  | (string & {});
+
+export const TrafficGroupTargetType = {
+  Procedure: "procedure",
+} as const;
+export type TrafficGroupTargetType =
+  | (typeof TrafficGroupTargetType)[keyof typeof TrafficGroupTargetType]
+  | (string & {});

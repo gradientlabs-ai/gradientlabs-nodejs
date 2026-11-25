@@ -1,12 +1,19 @@
 import type { Attachment, CustomerSupportPlatformIdentifier } from "./common.js";
-import type { Channel, ConversationEventType, ParticipantType, SupportPlatform } from "./enums.js";
+import type {
+  Channel,
+  ConversationEventType,
+  ConversationFinishReasonCode,
+  ConversationStatus,
+  ParticipantType,
+  SupportPlatform,
+} from "./enums.js";
 
 /** Agent-derived metadata about how a conversation was processed. */
 export interface AgentMetadata {
-  intent: string;
-  intent_handoff_target: string;
-  handoff_reason: string;
-  handoff_note: string;
+  intent?: string;
+  intent_handoff_target?: string;
+  handoff_reason?: string;
+  handoff_note?: string;
 }
 
 /** A series of messages between a customer, human agent, and the AI agent. */
@@ -16,11 +23,11 @@ export interface Conversation {
   channel: Channel;
   created: string;
   updated: string;
-  status: string;
+  status: ConversationStatus;
   /** Whether an AI agent is currently actively handling this conversation. */
   agent_is_active: boolean;
-  latest_intent: string;
-  latest_handoff_target: string;
+  latest_intent?: string;
+  latest_handoff_target?: string;
   latest_agent_metadata?: AgentMetadata;
 }
 
@@ -52,8 +59,6 @@ export interface StartConversationParams {
   assignee_id?: string;
   /** Set to "AI Agent" to assign the conversation to the Gradient Labs AI. */
   assignee_type?: ParticipantType;
-  /** Arbitrary metadata attached to the conversation; echoed back in webhooks. */
-  metadata?: unknown;
   /** Optional creation timestamp (RFC3339). Defaults to now. */
   created?: string;
   /** Structured context data the AI agent can use, keyed by resource type. */
@@ -98,7 +103,7 @@ export interface CancelConversationParams {
 export interface FinishConversationParams {
   reason?: string;
   /** Categorises why the conversation finished, e.g. "customer-ended-chat" or "customer-unresponsive". */
-  reason_code?: string;
+  reason_code?: ConversationFinishReasonCode;
   timestamp?: string;
 }
 

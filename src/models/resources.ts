@@ -14,15 +14,15 @@ export interface Attribute {
   path: string;
   type: AttributeType;
   cardinality: AttributeCardinality;
-  description: string;
-  is_root: boolean;
+  description?: string;
+  is_root?: boolean;
   name: string;
 }
 
 /** The structure of data provided by a resource source or type. */
 export interface Schema {
   /** The complete JSON schema definition in its original format. */
-  raw: Record<string, unknown>;
+  raw?: Record<string, unknown>;
   attributes?: Attribute[];
 }
 
@@ -46,6 +46,12 @@ export interface ResourceSourceWebhookConfig {
   name: string;
 }
 
+/** Details of a resource source that Gradient Labs manages. */
+export interface ManagedResourceSource {
+  enabled: boolean;
+  key: string;
+}
+
 /** A data source that provides structured information to AI agents. */
 export interface ResourceSource {
   id: string;
@@ -60,6 +66,7 @@ export interface ResourceSource {
   schema?: Schema;
   http_config?: ResourceSourceHttpConfig;
   webhook_config?: ResourceSourceWebhookConfig;
+  managed?: ManagedResourceSource;
 }
 
 export interface CreateResourceSourceParams {
@@ -69,6 +76,10 @@ export interface CreateResourceSourceParams {
   attribute_descriptions?: Record<string, string>;
   http_config?: ResourceSourceHttpConfig;
   webhook_config?: ResourceSourceWebhookConfig;
+  /** Create the source on this branch, by ID. */
+  branch_id?: string;
+  /** Create the source on this branch, by name. */
+  branch_name?: string;
 }
 
 export interface UpdateResourceSourceParams {
@@ -93,7 +104,7 @@ export interface SourceConfig {
   /** Which attributes to include. Empty means all. */
   attributes: string[];
   /** Cache duration, e.g. "1h", "30m", "never". */
-  cache: string;
+  cache?: string;
 }
 
 /** A specific type of structured data accessible by AI agents. */
@@ -117,6 +128,10 @@ export interface CreateResourceTypeParams {
   description?: string;
   is_enabled?: boolean;
   source_config?: SourceConfig;
+  /** Create the type on this branch, by ID. */
+  branch_id?: string;
+  /** Create the type on this branch, by name. */
+  branch_name?: string;
 }
 
 export interface UpdateResourceTypeParams {

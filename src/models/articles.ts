@@ -16,6 +16,8 @@ export interface UpsertArticleParams {
   created: string;
   last_edited: string;
   public_url: string;
+  /** External identifiers of the knowledge bases the article belongs to. */
+  knowledge_base_ids?: string[];
 }
 
 export interface SetArticleUsageStatusParams {
@@ -27,15 +29,15 @@ export interface Topic {
   Source: string;
   ExternalID: string;
   Name: string;
-  Description: string;
+  Description?: string;
   Visibility: ArticleVisibility;
-  ParentExternalID: string;
+  ParentExternalID?: string;
   Created: string;
   LastEdited: string;
   LastSeen: string;
   /** Base64-encoded raw representation of the topic from the support platform. */
   Data: string;
-  PublicURL: string;
+  PublicURL?: string;
 }
 
 export interface ListTopicsParams {

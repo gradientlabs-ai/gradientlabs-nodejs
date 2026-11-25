@@ -1,11 +1,12 @@
 import type { BackOfficeTask } from "../models/back-office-tasks.js";
-import type { CustomerSource } from "../models/enums.js";
+import type { Channel, CustomerSource } from "../models/enums.js";
 
 /** The set of webhook event types currently delivered by Gradient Labs. */
 export const WebhookType = {
   AgentMessage: "agent.message",
   ConversationHandOff: "conversation.hand_off",
   ConversationFinished: "conversation.finished",
+  ConversationStart: "conversation.start",
   ActionExecute: "action.execute",
   ResourcePull: "resource.pull",
   BackOfficeTaskComplete: "back-office-task.complete",
@@ -72,6 +73,21 @@ export interface ConversationFinishedEvent {
   intent?: string;
 }
 
+/**
+ * Sent when an outbound conversation starts, with the first message to send to
+ * the customer. Reply with `{ conversation_id }` in the response body.
+ */
+export interface ConversationStartEvent {
+  customer_id: string;
+  channel: Channel;
+  /** The first message to send to the customer. */
+  body: string;
+  /** The subject line, for email conversations. Empty on other channels. */
+  subject: string;
+  /** "public-api" when started through the API, otherwise a Gradient Labs ID. */
+  initiator_id: string;
+}
+
 export interface ActionExecuteEvent {
   action: string;
   /** Arguments to execute the action with. */
@@ -123,6 +139,7 @@ export type WebhookEvent =
   | (WebhookBase & { type: "agent.message"; data: AgentMessageEvent })
   | (WebhookBase & { type: "conversation.hand_off"; data: ConversationHandOffEvent })
   | (WebhookBase & { type: "conversation.finished"; data: ConversationFinishedEvent })
+  | (WebhookBase & { type: "conversation.start"; data: ConversationStartEvent })
   | (WebhookBase & { type: "action.execute"; data: ActionExecuteEvent })
   | (WebhookBase & { type: "resource.pull"; data: ResourcePullEvent })
   | (WebhookBase & { type: "back-office-task.complete"; data: BackOfficeTaskCompleteEvent })

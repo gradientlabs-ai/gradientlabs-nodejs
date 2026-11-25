@@ -1,4 +1,9 @@
-import type { BodyEncoding, ParameterSource, ParameterType } from "./enums.js";
+import type {
+  BodyEncoding,
+  ParameterSource,
+  ParameterType,
+  ToolParameterTransferMode,
+} from "./enums.js";
 
 /** Request body configuration for an HTTP tool. */
 export interface HttpBodyDefinition {
@@ -9,6 +14,12 @@ export interface HttpBodyDefinition {
   form_field_templates?: Record<string, string>;
 }
 
+/** Retry behaviour for an HTTP request made by a tool. */
+export interface HttpRetryConfig {
+  max_attempts?: number;
+  request_timeout_seconds?: number;
+}
+
 /** Configures a tool to make direct HTTP requests to external APIs. */
 export interface HttpDefinition {
   method: string;
@@ -16,6 +27,7 @@ export interface HttpDefinition {
   url_template: string;
   header_templates?: Record<string, string>;
   body?: HttpBodyDefinition;
+  retry?: HttpRetryConfig;
 }
 
 /** Configures a tool to call a webhook. */
@@ -69,6 +81,8 @@ export interface ToolParameter {
   /** If nil, defaults to true (required). */
   required?: boolean;
   options?: ParameterOption[];
+  /** How an "attachment" parameter's file is passed to the tool. */
+  transfer_mode?: ToolParameterTransferMode;
 }
 
 /** A group of parameters that become active for a discriminator value. */
@@ -86,6 +100,8 @@ export interface Tool {
   parameters: ToolParameter[];
   parameter_sets?: ToolParameterSet[];
   draft?: boolean;
+  branch_id?: string;
+  branch_name?: string;
   http?: HttpDefinition;
   webhook?: ToolWebhookConfiguration;
   async?: AsyncDefinition;
@@ -99,6 +115,10 @@ export interface CreateToolParams {
   parameters: ToolParameter[];
   parameter_sets?: ToolParameterSet[];
   draft?: boolean;
+  /** Create the tool on this branch, by ID. */
+  branch_id?: string;
+  /** Create the tool on this branch, by name. */
+  branch_name?: string;
   http?: HttpDefinition;
   webhook?: ToolWebhookConfiguration;
   async?: AsyncDefinition;

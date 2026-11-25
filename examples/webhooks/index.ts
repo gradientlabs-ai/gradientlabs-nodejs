@@ -46,6 +46,9 @@ const server = createServer((req, res) => {
         case "conversation.finished":
           console.log("  conversation finished");
           break;
+        case "conversation.start":
+          console.log("  outbound conversation to", event.data.customer_id);
+          break;
         default:
           console.log("  (no specific handler)");
       }

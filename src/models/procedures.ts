@@ -11,7 +11,7 @@ export interface Procedure {
   created: string;
   updated: string;
   has_daily_limit: boolean;
-  max_daily_conversations: number;
+  max_daily_conversations?: number;
 }
 
 /** Configuration limiting a gated procedure version. */
