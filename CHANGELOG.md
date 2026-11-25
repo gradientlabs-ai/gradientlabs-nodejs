@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0]
+
+### Removed
+
+- **Breaking**: `StartConversationParams.metadata`. The API has no such field and
+  ignored it; the `metadata` on `action.execute` and `resource.pull` webhooks is
+  not set through this call.
+
+### Changed
+
+- **Breaking**: `HandOffTarget` now has a `ref` field, and `Note`,
+  `Procedure`, `Topic`, `Attachment`, `AgentMetadata`, `Conversation`, `Schema`,
+  `Attribute` and `SourceConfig` fields the API can omit are now optional.
+- **Breaking**: `Conversation.status` is typed as `ConversationStatus`,
+  `FinishConversationParams.reason_code` as `ConversationFinishReasonCode` and
+  `TrafficGroupTarget.target_type` as `TrafficGroupTargetType`. Each still
+  accepts any string.
+- `CreateNoteParams` and `UpdateNoteParams` no longer require `body`,
+  `webpage_url`, `start_time` and `end_time`.
+
+### Added
+
+- `client.customers` with `listMemories()`, `batchCreateMemoriesV2()` and the
+  deprecated `batchCreateMemories()` for the `/customers/{customer_id}/memories`
+  endpoints.
+- `client.files` with `beginUpload()`, `create()`, `list()` and `listAll()`.
+- `client.knowledgeBases` with `list()`, `create()`, `get()` and `update()`.
+- `client.notes.list()`, `.listAll()` and `.get()`, and `attributes` and
+  `knowledge_base_ids` on notes.
+- `knowledge_base_ids` on `UpsertArticleParams`, `ref` on
+  `UpsertHandOffTargetParams`, `live_handoff_url` on `VoiceCallContext`,
+  `retry` on `HttpDefinition`, `transfer_mode` on `ToolParameter`, `branch_id`
+  and `branch_name` on tool, resource source and resource type creation, and
+  `managed` on `ResourceSource`.
+- The `conversation.start` webhook event.
+- `kustomer` support platform and customer source, the
+  `salesforce_contact_email` and `salesforce_supplied_email` identifier types,
+  and the `json` and `attachment` tool parameter types.
+
 ### Fixed
 
 - Failures reading a response body are now thrown as `GradientLabsError` with
