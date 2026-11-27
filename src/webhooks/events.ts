@@ -6,7 +6,9 @@ export const WebhookType = {
   AgentMessage: "agent.message",
   ConversationHandOff: "conversation.hand_off",
   ConversationFinished: "conversation.finished",
+  ConversationStart: "conversation.start",
   ActionExecute: "action.execute",
+  /** @deprecated Resource requests now arrive as action.execute. */
   ResourcePull: "resource.pull",
   BackOfficeTaskComplete: "back-office-task.complete",
   BackOfficeTaskHandOff: "back-office-task.hand-off",
@@ -72,6 +74,21 @@ export interface ConversationFinishedEvent {
   intent?: string;
 }
 
+/**
+ * Sent when an outbound conversation starts, with the first message to send to
+ * the customer. Reply with `{ conversation_id }` in the response body.
+ */
+export interface ConversationStartEvent {
+  customer_id: string;
+  channel: "email" | "web";
+  /** The first message to send to the customer. */
+  body: string;
+  /** The subject line, for email conversations. Empty on other channels. */
+  subject: string;
+  /** "public-api" when started through the API, otherwise a Gradient Labs ID. */
+  initiator_id: string;
+}
+
 export interface ActionExecuteEvent {
   action: string;
   /** Arguments to execute the action with. */
@@ -82,6 +99,7 @@ export interface ActionExecuteEvent {
   back_office_task?: ActionWebhookBackOfficeTask;
 }
 
+/** @deprecated Use ActionExecuteEvent for resource requests. */
 export interface ResourcePullEvent {
   resource_type: string;
   /** Set when the pull ran in a conversation context. */
@@ -96,15 +114,33 @@ export interface ResourcePullEvent {
  * reason) lives inside that task object.
  */
 export interface BackOfficeTaskCompleteEvent {
-  back_office_task: BackOfficeTask;
+  back_office_task: Omit<
+    BackOfficeTask,
+    "failed" | "failure_reasons" | "handed_off" | "hand_off_reason"
+  > & {
+    status: "completed";
+    completed: string;
+    result: { result_type: "custom"; custom: unknown };
+  };
 }
 
 export interface BackOfficeTaskHandOffEvent {
-  back_office_task: BackOfficeTask;
+  back_office_task: Omit<BackOfficeTask, "completed" | "result" | "failed" | "failure_reasons"> & {
+    status: "handed-off";
+    handed_off: string;
+    hand_off_reason: string;
+  };
 }
 
 export interface BackOfficeTaskFailEvent {
-  back_office_task: BackOfficeTask;
+  back_office_task: Omit<
+    BackOfficeTask,
+    "completed" | "result" | "handed_off" | "hand_off_reason"
+  > & {
+    status: "failed";
+    failed: string;
+    failure_reasons: string[];
+  };
 }
 
 /** Fields common to every webhook envelope. */
@@ -123,6 +159,7 @@ export type WebhookEvent =
   | (WebhookBase & { type: "agent.message"; data: AgentMessageEvent })
   | (WebhookBase & { type: "conversation.hand_off"; data: ConversationHandOffEvent })
   | (WebhookBase & { type: "conversation.finished"; data: ConversationFinishedEvent })
+  | (WebhookBase & { type: "conversation.start"; data: ConversationStartEvent })
   | (WebhookBase & { type: "action.execute"; data: ActionExecuteEvent })
   | (WebhookBase & { type: "resource.pull"; data: ResourcePullEvent })
   | (WebhookBase & { type: "back-office-task.complete"; data: BackOfficeTaskCompleteEvent })

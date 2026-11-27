@@ -3,8 +3,11 @@ import { HttpClient, type FetchLike } from "./internal/http.js";
 import { Articles } from "./resources/articles.js";
 import { BackOfficeTasks } from "./resources/back-office-tasks.js";
 import { Conversations } from "./resources/conversations.js";
+import { Customers } from "./resources/customers.js";
+import { Files } from "./resources/files.js";
 import { HandOffTargets } from "./resources/hand-off-targets.js";
 import { IpAddressesResource } from "./resources/ip-addresses.js";
+import { KnowledgeBases } from "./resources/knowledge-bases.js";
 import { Notes } from "./resources/notes.js";
 import { OutboundConversations } from "./resources/outbound-conversations.js";
 import { Procedures } from "./resources/procedures.js";
@@ -45,6 +48,7 @@ const defaultFetch: FetchLike = (input, init) =>
 export class GradientLabs {
   // Integration role (publicapi)
   readonly conversations: Conversations;
+  readonly customers: Customers;
   readonly outboundConversations: OutboundConversations;
   readonly backOfficeTasks: BackOfficeTasks;
   readonly voice: Voice;
@@ -59,6 +63,8 @@ export class GradientLabs {
   readonly resourceTypes: ResourceTypes;
   readonly secrets: Secrets;
   readonly notes: Notes;
+  readonly knowledgeBases: KnowledgeBases;
+  readonly files: Files;
   readonly terminologySubstitutions: TerminologySubstitutions;
   readonly trafficGroups: TrafficGroups;
   readonly ipAddresses: IpAddressesResource;
@@ -78,6 +84,7 @@ export class GradientLabs {
     });
 
     this.conversations = new Conversations(http);
+    this.customers = new Customers(http);
     this.outboundConversations = new OutboundConversations(http);
     this.backOfficeTasks = new BackOfficeTasks(http);
     this.voice = new Voice(http);
@@ -91,6 +98,8 @@ export class GradientLabs {
     this.resourceTypes = new ResourceTypes(http);
     this.secrets = new Secrets(http);
     this.notes = new Notes(http);
+    this.knowledgeBases = new KnowledgeBases(http);
+    this.files = new Files(http);
     this.terminologySubstitutions = new TerminologySubstitutions(http);
     this.trafficGroups = new TrafficGroups(http);
     this.ipAddresses = new IpAddressesResource(http);

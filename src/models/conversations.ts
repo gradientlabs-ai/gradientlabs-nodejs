@@ -1,12 +1,18 @@
 import type { Attachment, CustomerSupportPlatformIdentifier } from "./common.js";
-import type { Channel, ConversationEventType, ParticipantType, SupportPlatform } from "./enums.js";
+import type {
+  Channel,
+  ConversationFinishReasonCode,
+  ConversationStatus,
+  ParticipantType,
+  SupportPlatform,
+} from "./enums.js";
 
 /** Agent-derived metadata about how a conversation was processed. */
 export interface AgentMetadata {
-  intent: string;
-  intent_handoff_target: string;
-  handoff_reason: string;
-  handoff_note: string;
+  intent?: string;
+  intent_handoff_target?: string;
+  handoff_reason?: string;
+  handoff_note?: string;
 }
 
 /** A series of messages between a customer, human agent, and the AI agent. */
@@ -16,13 +22,18 @@ export interface Conversation {
   channel: Channel;
   created: string;
   updated: string;
-  status: string;
+  status: ConversationStatus;
   /** Whether an AI agent is currently actively handling this conversation. */
   agent_is_active: boolean;
-  latest_intent: string;
-  latest_handoff_target: string;
+  latest_intent?: string;
+  latest_handoff_target?: string;
   latest_agent_metadata?: AgentMetadata;
 }
+
+export type StartedConversation = Omit<
+  Conversation,
+  "latest_intent" | "latest_handoff_target" | "latest_agent_metadata"
+> & { latest_agent_metadata?: Record<string, never> };
 
 /** A single message within a conversation. */
 export interface Message {
@@ -30,10 +41,8 @@ export interface Message {
   body: string;
   participant_id: string;
   participant_type: ParticipantType;
-  subject?: string;
   attachments?: Attachment[];
   created?: string;
-  conversation_token?: string;
 }
 
 export interface StartConversationParams {
@@ -52,8 +61,6 @@ export interface StartConversationParams {
   assignee_id?: string;
   /** Set to "AI Agent" to assign the conversation to the Gradient Labs AI. */
   assignee_type?: ParticipantType;
-  /** Arbitrary metadata attached to the conversation; echoed back in webhooks. */
-  metadata?: unknown;
   /** Optional creation timestamp (RFC3339). Defaults to now. */
   created?: string;
   /** Structured context data the AI agent can use, keyed by resource type. */
@@ -67,7 +74,7 @@ export interface StartConversationParams {
 export interface AddMessageParams {
   id: string;
   body?: string;
-  participant_id: string;
+  participant_id?: string;
   participant_type: ParticipantType;
   subject?: string;
   attachments?: Attachment[];
@@ -98,19 +105,20 @@ export interface CancelConversationParams {
 export interface FinishConversationParams {
   reason?: string;
   /** Categorises why the conversation finished, e.g. "customer-ended-chat" or "customer-unresponsive". */
-  reason_code?: string;
+  reason_code?: ConversationFinishReasonCode;
   timestamp?: string;
 }
 
-export interface ConversationEventParams {
-  type: ConversationEventType;
+export type ConversationEventParams = (
+  | { type: "internal-note"; body: string }
+  | { type: "delivered" | "read" | "typing"; body?: string }
+) & {
   participant_id: string;
   participant_type: ParticipantType;
-  body?: string;
   message_id?: string;
   idempotency_key?: string;
   timestamp?: string;
-}
+};
 
 export interface RateConversationParams {
   type: string;
@@ -124,7 +132,7 @@ export interface RateConversationParams {
 export interface ReturnAsyncToolResultParams {
   async_tool_execution_id: string;
   /** Required by the API: the JSON result of the async tool execution. */
-  payload: Record<string, unknown>;
+  payload: unknown;
   timestamp?: string;
 }
 

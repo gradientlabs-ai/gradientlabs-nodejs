@@ -2,7 +2,9 @@ import type { HttpDefinition } from "./tools.js";
 
 /** HTTP mechanism for refreshing a secret's value. */
 export interface RefreshMechanismHttp {
-  request_definition: HttpDefinition;
+  request_definition: Omit<HttpDefinition, "retry"> & {
+    retry?: { request_timeout_seconds?: number };
+  };
   /** Name of the parameter in the (JSON) response body. */
   response_param_name: string;
 }

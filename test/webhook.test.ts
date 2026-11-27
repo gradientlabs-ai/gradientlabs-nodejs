@@ -163,6 +163,16 @@ describe("WebhookVerifier.parse", () => {
     ],
     ["conversation.finished", { conversation: { id: "c", customer_id: "u" } }],
     [
+      "conversation.start",
+      {
+        customer_id: "u",
+        channel: "email",
+        body: "Hi",
+        subject: "Your payment",
+        initiator_id: "public-api",
+      },
+    ],
+    [
       "action.execute",
       {
         action: "create_ticket",

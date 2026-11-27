@@ -39,10 +39,11 @@ The client is organised into resource namespaces, e.g. `client.conversations`,
 `client.tools`, `client.procedures`. There are two API key roles:
 
 - **Integration** — conversation runtime endpoints (`conversations`,
-  `outboundConversations`, `backOfficeTasks`, `voice`).
+  `customers`, `outboundConversations`, `backOfficeTasks`, `voice`).
 - **Management** — configuration endpoints (`tools`, `articles`, `topics`,
   `procedures`, `handOffTargets`, `resourceSources`, `resourceTypes`, `secrets`,
-  `notes`, `terminologySubstitutions`, `trafficGroups`, `ipAddresses`).
+  `notes`, `knowledgeBases`, `files`, `terminologySubstitutions`,
+  `trafficGroups`, `ipAddresses`).
 
 ## Configuration
 
@@ -204,13 +205,13 @@ fully-typed `event.data`. The optional `X-GradientLabs-Token` header is returned
 as `token`.
 
 Supported event types: `agent.message`, `conversation.hand_off`,
-`conversation.finished`, `action.execute`, `resource.pull`,
+`conversation.finished`, `conversation.start`, `action.execute`, `resource.pull`,
 `back-office-task.complete`, `back-office-task.hand-off`, `back-office-task.fail`.
 
 ## Examples
 
 See the [`examples/`](./examples) directory for runnable examples covering
-conversations, tools, articles, procedures, resources, back-office tasks, and a
+conversations, customers, tools, articles, procedures, resources, back-office tasks, and a
 webhook server.
 
 ## Releasing
