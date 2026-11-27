@@ -8,6 +8,8 @@ export interface VoiceCallContext {
   last_executed_procedure?: string;
   last_executed_procedure_url?: string;
   gradient_labs_url?: string;
+  /** Link to the live hand-off for this call, when there is one. */
+  live_handoff_url?: string;
 }
 
 export interface ReadVoiceCallContextParams {

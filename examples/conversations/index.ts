@@ -22,7 +22,6 @@ async function main(): Promise<void> {
     customer_id: "customer-123",
     channel: "web",
     assignee_type: "AI Agent",
-    metadata: { source: "nodejs-example" },
   });
   console.log("Started conversation:", conversation.id, conversation.status);
 

@@ -31,6 +31,7 @@ export {
   type AgentMessageEvent,
   type ConversationHandOffEvent,
   type ConversationFinishedEvent,
+  type ConversationStartEvent,
   type ActionExecuteEvent,
   type ResourcePullEvent,
   type BackOfficeTaskCompleteEvent,
@@ -40,6 +41,7 @@ export {
 
 // Resource classes (for typing/advanced usage)
 export { Conversations } from "./resources/conversations.js";
+export { Customers } from "./resources/customers.js";
 export { OutboundConversations } from "./resources/outbound-conversations.js";
 export { BackOfficeTasks } from "./resources/back-office-tasks.js";
 export { Voice } from "./resources/voice.js";
@@ -52,6 +54,8 @@ export { ResourceSources } from "./resources/resource-sources.js";
 export { ResourceTypes } from "./resources/resource-types.js";
 export { Secrets } from "./resources/secrets.js";
 export { Notes } from "./resources/notes.js";
+export { KnowledgeBases } from "./resources/knowledge-bases.js";
+export { Files } from "./resources/files.js";
 export { TerminologySubstitutions } from "./resources/terminology-substitutions.js";
 export { TrafficGroups } from "./resources/traffic-groups.js";
 export { IpAddressesResource, type IpAddresses } from "./resources/ip-addresses.js";
@@ -62,6 +66,7 @@ export * from "./models/enums.js";
 // Models
 export * from "./models/common.js";
 export * from "./models/conversations.js";
+export * from "./models/customers.js";
 export * from "./models/back-office-tasks.js";
 export * from "./models/voice.js";
 export * from "./models/tools.js";
@@ -71,5 +76,7 @@ export * from "./models/hand-off-targets.js";
 export * from "./models/resources.js";
 export * from "./models/secrets.js";
 export * from "./models/notes.js";
+export * from "./models/knowledge-bases.js";
+export * from "./models/files.js";
 export * from "./models/terminology.js";
 export * from "./models/traffic-groups.js";

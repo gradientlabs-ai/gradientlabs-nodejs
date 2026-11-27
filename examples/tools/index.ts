@@ -1,6 +1,5 @@
 /**
- * Tools example: lists existing tools, creates a simple HTTP tool, reads it
- * back, then deletes it. Requires a Management API key.
+ * Tools example: lists existing tools and creates an HTTP tool on a branch. Requires a Management API key.
  *
  * In your own project: import { GradientLabs } from "@gradientlabs/client";
  */
@@ -17,9 +16,10 @@ async function main(): Promise<void> {
   const tools = await client.tools.list();
   console.log(`You have ${tools.length} tool(s).`);
 
-  const id = `example-tool-${Date.now()}`;
+  const branchName = process.env.GRADIENT_LABS_BRANCH_NAME;
+  if (!branchName) throw new Error("Set GRADIENT_LABS_BRANCH_NAME to an existing branch");
   const created = await client.tools.create({
-    id,
+    branch_name: branchName,
     name: "Example weather lookup",
     description: "Looks up the weather for a city. Created by the Node.js example.",
     parameters: [
@@ -37,12 +37,6 @@ async function main(): Promise<void> {
     },
   });
   console.log("Created tool:", created.id);
-
-  const fetched = await client.tools.get(id);
-  console.log("Read tool:", fetched.name);
-
-  await client.tools.delete(id);
-  console.log("Deleted tool");
 }
 
 main().catch((err) => {
