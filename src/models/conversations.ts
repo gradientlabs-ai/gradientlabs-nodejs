@@ -1,7 +1,6 @@
 import type { Attachment, CustomerSupportPlatformIdentifier } from "./common.js";
 import type {
   Channel,
-  ConversationEventType,
   ConversationFinishReasonCode,
   ConversationStatus,
   ParticipantType,
@@ -31,16 +30,19 @@ export interface Conversation {
   latest_agent_metadata?: AgentMetadata;
 }
 
+export type StartedConversation = Omit<
+  Conversation,
+  "latest_intent" | "latest_handoff_target" | "latest_agent_metadata"
+> & { latest_agent_metadata?: Record<string, never> };
+
 /** A single message within a conversation. */
 export interface Message {
   id: string;
   body: string;
   participant_id: string;
   participant_type: ParticipantType;
-  subject?: string;
   attachments?: Attachment[];
   created?: string;
-  conversation_token?: string;
 }
 
 export interface StartConversationParams {
@@ -72,7 +74,7 @@ export interface StartConversationParams {
 export interface AddMessageParams {
   id: string;
   body?: string;
-  participant_id: string;
+  participant_id?: string;
   participant_type: ParticipantType;
   subject?: string;
   attachments?: Attachment[];
@@ -107,15 +109,16 @@ export interface FinishConversationParams {
   timestamp?: string;
 }
 
-export interface ConversationEventParams {
-  type: ConversationEventType;
+export type ConversationEventParams = (
+  | { type: "internal-note"; body: string }
+  | { type: "delivered" | "read" | "typing"; body?: string }
+) & {
   participant_id: string;
   participant_type: ParticipantType;
-  body?: string;
   message_id?: string;
   idempotency_key?: string;
   timestamp?: string;
-}
+};
 
 export interface RateConversationParams {
   type: string;
@@ -129,7 +132,7 @@ export interface RateConversationParams {
 export interface ReturnAsyncToolResultParams {
   async_tool_execution_id: string;
   /** Required by the API: the JSON result of the async tool execution. */
-  payload: Record<string, unknown>;
+  payload: unknown;
   timestamp?: string;
 }
 

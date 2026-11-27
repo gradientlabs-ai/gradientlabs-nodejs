@@ -12,6 +12,7 @@ import type {
   RateConversationParams,
   ResumeConversationParams,
   ReturnAsyncToolResultParams,
+  StartedConversation,
   StartConversationParams,
 } from "../models/conversations.js";
 
@@ -22,7 +23,7 @@ export class Conversations {
   constructor(private readonly http: HttpClient) {}
 
   /** Begins a conversation. */
-  start(params: StartConversationParams, config: RequestConfig = {}): Promise<Conversation> {
+  start(params: StartConversationParams, config: RequestConfig = {}): Promise<StartedConversation> {
     return this.http.request("POST", "conversations", { body: params, signal: config.signal });
   }
 

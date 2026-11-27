@@ -12,7 +12,7 @@ import type {
 
 interface ListFilesResponse {
   files: WorkspaceFile[];
-  pagination: { next?: string; prev?: string };
+  pagination: { next?: string };
 }
 
 /**

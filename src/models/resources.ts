@@ -87,7 +87,7 @@ export interface UpdateResourceSourceParams {
   description?: string;
   source_type?: ResourceSourceType;
   attribute_descriptions?: Record<string, string>;
-  schema?: Schema;
+  schema?: Pick<Schema, "raw">;
   http_config?: ResourceSourceHttpConfig;
   webhook_config?: ResourceSourceWebhookConfig;
 }

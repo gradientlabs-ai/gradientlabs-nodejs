@@ -12,7 +12,7 @@ import type {
 
 interface ListNotesResponse {
   notes: Note[];
-  pagination: { next?: string; prev?: string };
+  pagination: { next?: string };
 }
 
 /**

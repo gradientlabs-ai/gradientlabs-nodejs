@@ -41,7 +41,6 @@ export const Channel = {
   Web: "web",
   Email: "email",
   Voice: "voice",
-  Unmapped: "unmapped",
 } as const;
 export type Channel = (typeof Channel)[keyof typeof Channel] | (string & {});
 
@@ -60,7 +59,6 @@ export const CustomerSource = {
   IntercomVoice: "intercom-voice",
   Livechat: "livechat",
   Kustomer: "kustomer",
-  WebApp: "web-app",
   Gmail: "gmail",
   File: "file",
 } as const;
@@ -213,8 +211,6 @@ export const SupportPlatform = {
   Twilio: "twilio",
   Talkdesk: "talkdesk",
   IntercomVoice: "intercom-voice",
-  ConversationSynthesizor: "conversation-synthesizor",
-  WebApp: "web-app",
 } as const;
 export type SupportPlatform =
   | (typeof SupportPlatform)[keyof typeof SupportPlatform]

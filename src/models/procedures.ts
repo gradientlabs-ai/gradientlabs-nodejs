@@ -1,4 +1,3 @@
-import type { UserDetails } from "./common.js";
 import type { ProcedureStatus } from "./enums.js";
 
 /** An AI agent procedure that defines how the agent should handle conversations. */
@@ -7,7 +6,6 @@ export interface Procedure {
   name: string;
   description: string;
   status: ProcedureStatus;
-  author: UserDetails;
   created: string;
   updated: string;
   has_daily_limit: boolean;

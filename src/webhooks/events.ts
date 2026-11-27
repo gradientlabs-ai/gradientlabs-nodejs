@@ -1,5 +1,5 @@
 import type { BackOfficeTask } from "../models/back-office-tasks.js";
-import type { Channel, CustomerSource } from "../models/enums.js";
+import type { CustomerSource } from "../models/enums.js";
 
 /** The set of webhook event types currently delivered by Gradient Labs. */
 export const WebhookType = {
@@ -8,6 +8,7 @@ export const WebhookType = {
   ConversationFinished: "conversation.finished",
   ConversationStart: "conversation.start",
   ActionExecute: "action.execute",
+  /** @deprecated Resource requests now arrive as action.execute. */
   ResourcePull: "resource.pull",
   BackOfficeTaskComplete: "back-office-task.complete",
   BackOfficeTaskHandOff: "back-office-task.hand-off",
@@ -79,7 +80,7 @@ export interface ConversationFinishedEvent {
  */
 export interface ConversationStartEvent {
   customer_id: string;
-  channel: Channel;
+  channel: "email" | "web";
   /** The first message to send to the customer. */
   body: string;
   /** The subject line, for email conversations. Empty on other channels. */
@@ -98,6 +99,7 @@ export interface ActionExecuteEvent {
   back_office_task?: ActionWebhookBackOfficeTask;
 }
 
+/** @deprecated Use ActionExecuteEvent for resource requests. */
 export interface ResourcePullEvent {
   resource_type: string;
   /** Set when the pull ran in a conversation context. */
@@ -112,15 +114,33 @@ export interface ResourcePullEvent {
  * reason) lives inside that task object.
  */
 export interface BackOfficeTaskCompleteEvent {
-  back_office_task: BackOfficeTask;
+  back_office_task: Omit<
+    BackOfficeTask,
+    "failed" | "failure_reasons" | "handed_off" | "hand_off_reason"
+  > & {
+    status: "completed";
+    completed: string;
+    result: { result_type: "custom"; custom: unknown };
+  };
 }
 
 export interface BackOfficeTaskHandOffEvent {
-  back_office_task: BackOfficeTask;
+  back_office_task: Omit<BackOfficeTask, "completed" | "result" | "failed" | "failure_reasons"> & {
+    status: "handed-off";
+    handed_off: string;
+    hand_off_reason: string;
+  };
 }
 
 export interface BackOfficeTaskFailEvent {
-  back_office_task: BackOfficeTask;
+  back_office_task: Omit<
+    BackOfficeTask,
+    "completed" | "result" | "handed_off" | "hand_off_reason"
+  > & {
+    status: "failed";
+    failed: string;
+    failure_reasons: string[];
+  };
 }
 
 /** Fields common to every webhook envelope. */

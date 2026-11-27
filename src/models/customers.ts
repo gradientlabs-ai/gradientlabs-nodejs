@@ -11,8 +11,8 @@ export interface Memory {
   custom_type: MemoryCustomType;
   /** RFC3339 timestamp for when the memory occurred. */
   created_at: string;
-  /** Arbitrary JSON object stored verbatim as the memory's payload. */
-  data: Record<string, unknown>;
+  /** Arbitrary JSON value stored verbatim as the memory's payload. */
+  data: unknown;
 }
 
 export interface BatchCreateMemoriesV2Params {
@@ -28,8 +28,8 @@ export interface MemoryInputV1 {
   custom_type: string;
   /** RFC3339 timestamp for when the memory occurred. */
   created_at: string;
-  /** Arbitrary JSON object stored verbatim as the memory's payload. */
-  data: Record<string, unknown>;
+  /** Arbitrary JSON value stored verbatim as the memory's payload. */
+  data: unknown;
 }
 
 export interface MemoriesBatchCreateParams {

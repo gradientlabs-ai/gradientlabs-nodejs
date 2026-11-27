@@ -12,7 +12,7 @@ import type {
 export class Customers {
   constructor(private readonly http: HttpClient) {}
 
-  /** Lists all memories currently retained for a customer. */
+  /** Experimental. Lists all memories currently retained for a customer. */
   async listMemories(customerId: string, config: RequestConfig = {}): Promise<Memory[]> {
     const rsp = await this.http.request<{ memories: Memory[] }>(
       "GET",
@@ -23,7 +23,7 @@ export class Customers {
   }
 
   /**
-   * Creates a batch of memories for a customer for the agent to search over on
+   * Experimental. Creates a batch of memories for a customer for the agent to search over on
    * demand, where each memory's category is a plain name. The call is
    * asynchronous: it returns once the batch is accepted. Throws an
    * {@link ApiError} with status 409 if a batch is already being created for
@@ -44,7 +44,7 @@ export class Customers {
   }
 
   /**
-   * Creates a batch of memories for a customer for the agent to search over on
+   * Experimental. Creates a batch of memories for a customer for the agent to search over on
    * demand. The call is asynchronous: it returns once the batch is accepted.
    * Throws an {@link ApiError} with status 409 if a batch is already being
    * created for the same customer.

@@ -3,19 +3,19 @@ import type { ArticleStatus, ArticleUsageStatus, ArticleVisibility } from "./enu
 export interface UpsertArticleParams {
   /** External identifier the company uses for this article. */
   id: string;
-  author_id: string;
-  title: string;
-  description: string;
-  body: string;
+  author_id?: string;
+  title?: string;
+  description?: string;
+  body?: string;
   visibility: ArticleVisibility;
   /** External identifier of the topic this article belongs to. */
-  topic_id: string;
+  topic_id?: string;
   status: ArticleStatus;
   /** Additional meta-data about the article. */
-  data: Record<string, unknown>;
+  data?: unknown;
   created: string;
   last_edited: string;
-  public_url: string;
+  public_url?: string;
   /** External identifiers of the knowledge bases the article belongs to. */
   knowledge_base_ids?: string[];
 }
@@ -54,13 +54,13 @@ export interface UpsertTopicParams {
   /** External identifier the company uses for this topic. */
   id: string;
   /** External identifier of this topic's parent topic. */
-  parent_id: string;
+  parent_id?: string;
   name: string;
-  description: string;
+  description?: string;
   visibility: ArticleVisibility;
-  status: ArticleStatus;
-  data: Record<string, unknown>;
+  status?: ArticleStatus;
+  data?: unknown;
   created: string;
   last_edited: string;
-  public_url: string;
+  public_url?: string;
 }

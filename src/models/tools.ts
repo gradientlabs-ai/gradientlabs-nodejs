@@ -35,12 +35,6 @@ export interface ToolWebhookConfiguration {
   name: string;
 }
 
-/** Configures a tool to execute via a Temporal workflow. */
-export interface WorkflowConfiguration {
-  workflow_type: string;
-  task_queue: string;
-}
-
 /** Configures a tool to execute via a Model Context Protocol server. */
 export interface McpConfiguration {
   server_id: string;
@@ -51,7 +45,6 @@ export interface McpConfiguration {
 export interface ChildTool {
   http?: HttpDefinition;
   webhook?: ToolWebhookConfiguration;
-  workflow?: WorkflowConfiguration;
 }
 
 /**
@@ -109,7 +102,6 @@ export interface Tool {
 }
 
 export interface CreateToolParams {
-  id: string;
   name: string;
   description: string;
   parameters: ToolParameter[];
@@ -122,12 +114,12 @@ export interface CreateToolParams {
   http?: HttpDefinition;
   webhook?: ToolWebhookConfiguration;
   async?: AsyncDefinition;
-  mcp?: McpConfiguration;
 }
 
 export interface UpdateToolParams {
-  description: string;
-  parameters: ToolParameter[];
+  description?: string;
+  parameters?: ToolParameter[];
+  parameter_sets?: ToolParameterSet[];
   http?: HttpDefinition;
   webhook?: ToolWebhookConfiguration;
   async?: AsyncDefinition;
@@ -153,7 +145,7 @@ export interface ExecuteToolParams {
 export interface ToolExecutionResult {
   id: string;
   /** JSON result of the execution, if it succeeded. */
-  result?: Record<string, unknown>;
+  result?: unknown;
   /** Error that occurred during execution, if it failed. */
   error?: string;
 }
