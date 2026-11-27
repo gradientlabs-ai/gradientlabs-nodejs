@@ -306,3 +306,12 @@ describe("changed fields", () => {
     expect(ctx.live_handoff_url).toBe("https://example.com/live");
   });
 });
+
+it("lists enabled MCP tools", async () => {
+  const mcp = { server_id: "mcpserver_1", external_tool_name: "lookup_order" };
+  const { client } = setup(200, {
+    tools: [{ id: "tool_1", name: "lookup", description: "Look up an order", parameters: [], mcp }],
+  });
+  const tools = await client.tools.list();
+  expect(tools[0]?.mcp).toEqual(mcp);
+});

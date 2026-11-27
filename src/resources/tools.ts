@@ -19,7 +19,7 @@ interface ToolListResponse {
 export class Tools {
   constructor(private readonly http: HttpClient) {}
 
-  /** Returns all tools created by the company. */
+  /** Lists company tools and enabled MCP tools. Interactive tools are omitted. */
   async list(config: RequestConfig = {}): Promise<Tool[]> {
     const rsp = await this.http.request<ToolListResponse>("GET", "tools", {
       signal: config.signal,
@@ -32,7 +32,7 @@ export class Tools {
     return this.http.request("POST", "tools", { body: params, signal: config.signal });
   }
 
-  /** Reads a tool by ID and optional version. */
+  /** Reads a tool by ID and optional version. Enabled MCP tools can be read by ID. Interactive tools return 404. */
   get(id: string, params: ReadToolParams = {}, config: RequestConfig = {}): Promise<Tool> {
     return this.http.request("GET", `tools/${encodeURIComponent(id)}`, {
       query: { version: params.version },
@@ -40,7 +40,7 @@ export class Tools {
     });
   }
 
-  /** Creates a new revision of a tool. The name and type cannot be changed. */
+  /** Updates a webhook, HTTP, async or draft tool. Only draft tools can change kind. Edit repository-managed tools in their files. */
   update(id: string, params: UpdateToolParams, config: RequestConfig = {}): Promise<Tool> {
     return this.http.request("PUT", `tools/${encodeURIComponent(id)}`, {
       body: params,
